@@ -1,11 +1,11 @@
 {
-	"id": "auto-exporter",
-	"name": "Auto Exporter",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Auto export tasks and daily note in a JSON !!!!",
-	"author": "Obsidian",
-	"authorUrl": "https://www.mariovisic.com/",
-	"fundingUrl": false,
-	"isDesktopOnly": false
+  "id": "trmnl-updater",
+  "name": "TRMNL Updater",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Export data for TRMNL plugins",
+  "author": "Obsidian",
+  "authorUrl": "https://www.mariovisic.com/",
+  "fundingUrl": false,
+  "isDesktopOnly": false
 }
