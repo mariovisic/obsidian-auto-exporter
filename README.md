@@ -60,7 +60,7 @@ Quick starting guide for new plugin devs:
 - To use eslint with this project, make sure to install eslint from terminal:
   - `npm install -g eslint`
 - To use eslint to analyze this project use this command:
-  - `eslint main.ts`
+  - `eslint src/main.ts`
   - eslint will then create a report with suggestions for code improvement by file and line number.
 - If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
   - `eslint .\src\`

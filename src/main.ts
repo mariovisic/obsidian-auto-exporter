@@ -5,7 +5,9 @@ import {
   DEFAULT_SETTINGS,
   SettingsTab,
   ObsidianExporterSettings,
-} from "settings";
+} from "./settings";
+
+import parseTime from "./parse_time"
 
 export default class ObsidianExporter extends Plugin {
   settings: ObsidianExporterSettings;
@@ -60,18 +62,30 @@ export default class ObsidianExporter extends Plugin {
             moment(task.completion.ts).isSame(moment().startOf("day"))),
       );
 
+    window.allTasks = allTasks // For debug !!!
     return allTasks.map((task: any) => {
 
       return {
+        id: this._getId(task.text),
         checked: task.checked,
         completed: task.completed,
-        fullyCompleted: task.fullyCompleted,
-        status: task.status,
-        scheduled: task.scheduled,
         due: task.due,
+        fullyCompleted: task.fullyCompleted,
+        scheduled: task.scheduled,
+        status: task.status,
+        tags: task.tags,
         text: task.text,
+        time: parseTime(task.text)
       };
     });
+  }
+
+  _getId(text?: string): string | undefined {
+    if (text && _.includes(text, '🆔')) {
+      const matches = text.match(/🆔\s*(\S*)/)
+      if (matches) { return matches[1] }
+
+    }
   }
 
   async loadSettings() {
