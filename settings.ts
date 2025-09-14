@@ -1,16 +1,16 @@
 import { App, Setting, PluginSettingTab } from "obsidian";
-import ObsidianTRMNLUpdater from "main";
+import ObsidianExporter from "main";
 
 export const DEFAULT_SETTINGS = {};
 
-export interface ObsidianTRMNLUpdaterSettings {
+export interface ObsidianExporterSettings {
   trmnlWebhookUrl: string;
 }
 
 export class SettingsTab extends PluginSettingTab {
-  plugin: ObsidianTRMNLUpdater;
+  plugin: ObsidianExporter;
 
-  constructor(app: App, plugin: ObsidianTRMNLUpdater) {
+  constructor(app: App, plugin: ObsidianExporter) {
     super(app, plugin);
     this.plugin = plugin;
   }

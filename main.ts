@@ -1,28 +1,31 @@
 import { Plugin, moment } from "obsidian";
-import { debounce } from "lodash";
+import _ from 'lodash';
+
 import {
   DEFAULT_SETTINGS,
   SettingsTab,
-  ObsidianTRMNLUpdaterSettings,
+  ObsidianExporterSettings,
 } from "settings";
 
-export default class ObsidianTRMNLUpdater extends Plugin {
-  settings: ObsidianTRMNLUpdaterSettings;
+export default class ObsidianExporter extends Plugin {
+  settings: ObsidianExporterSettings;
   exportFunction: () => void;
 
   async onload() {
-    console.log("Loading Obsidian TRMNL Updater");
-    console.log("exportFunction", this.exportFunction);
-    console.log("yes yes yes z");
+    console.log("loading Obsidian Exporter");
 
     await this.loadSettings();
 
-    this.registerEvent(this.app.vault.on("modify", this._export, this));
-    this.registerEvent(this.app.vault.on("delete", this._export, this));
+    const debouncedExport = _.debounce(this._export, 10000)
+
+    this.registerEvent(this.app.vault.on("modify", debouncedExport, this));
+    this.registerEvent(this.app.vault.on("delete", debouncedExport, this));
 
     this.addSettingTab(new SettingsTab(this.app, this));
 
-    this._export();
+    this.app.workspace.onLayoutReady(async () => {
+      this._export();
+    })
   }
 
   onunload() {
@@ -30,14 +33,13 @@ export default class ObsidianTRMNLUpdater extends Plugin {
   }
 
   async _export() {
+    console.log('[Exporter] writing to export.json');
+
     const file =
       this.app.vault.getFileByPath("export.json") ||
       (await this.app.vault.create("export.json", ""));
     const data = {
       tasks: await this._tasks(),
-      habits: await this._habits(),
-      eventsToday: await this._eventsToday(),
-      dailyNote: this._dailyNote(),
     };
 
     this.app.vault.process(file, () => {
@@ -59,26 +61,17 @@ export default class ObsidianTRMNLUpdater extends Plugin {
       );
 
     return allTasks.map((task: any) => {
+
       return {
         checked: task.checked,
         completed: task.completed,
         fullyCompleted: task.fullyCompleted,
         status: task.status,
+        scheduled: task.scheduled,
+        due: task.due,
         text: task.text,
       };
     });
-  }
-
-  async _habits() {
-    return "TODO";
-  }
-
-  async _eventsToday() {
-    return "TODO";
-  }
-
-  async _dailyNote() {
-    return "TODO";
   }
 
   async loadSettings() {
